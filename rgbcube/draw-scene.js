@@ -1,5 +1,5 @@
 function drawScene(gl, programInfo, buffers, cubeRotation, cubeTranslation) {
-  gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
+  gl.clearColor(0.0, 0.0, 0.0, 0.0); // Clear to black, fully opaque
   gl.clearDepth(1.0); // Clear everything
   gl.enable(gl.DEPTH_TEST); // Enable depth testing
   gl.depthFunc(gl.LEQUAL); // Near things obscure far things
@@ -15,7 +15,7 @@ function drawScene(gl, programInfo, buffers, cubeRotation, cubeTranslation) {
   // and we only want to see objects between 0.1 units
   // and 100 units away from the camera.
 
-  const fieldOfView = (45 * Math.PI) / 180; // in radians
+  const fieldOfView = (60 * Math.PI) / 180; // in radians
   const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
   const zNear = 0.1;
   const zFar = 100.0;

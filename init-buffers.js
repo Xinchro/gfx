@@ -1,3 +1,5 @@
+import { hslToRgb } from './utils.js'
+
 function initBuffers(gl) {
   const positionBuffer = initPositionBuffer(gl);
 
@@ -54,8 +56,8 @@ function initPositionBuffer(gl) {
   return positionBuffer;
 }
 
-function initColorBuffer(gl) {
-  const faceColors = [
+function initColorBuffer(gl, faceColors) {
+  if(!faceColors) faceColors = [
     [1.0, 1.0, 1.0, 1.0], // Front face: white
     [1.0, 0.0, 0.0, 1.0], // Back face: red
     [0.0, 1.0, 0.0, 1.0], // Top face: green
@@ -174,4 +176,4 @@ function initNormalBuffer(gl) {
 
 
 
-export { initBuffers };
+export { initBuffers, initColorBuffer };

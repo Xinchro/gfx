@@ -1,4 +1,4 @@
-function drawScene(gl, programInfo, buffers, cubeRotation) {
+function drawScene(gl, programInfo, buffers, cubeRotation, cubeTranslation) {
   gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
   gl.clearDepth(1.0); // Clear everything
   gl.enable(gl.DEPTH_TEST); // Enable depth testing
@@ -34,25 +34,25 @@ function drawScene(gl, programInfo, buffers, cubeRotation) {
   mat4.translate(
     modelViewMatrix, // destination matrix
     modelViewMatrix, // matrix to translate
-    [-0.0, 0.0, -6.0]
+    cubeTranslation
   ); // amount to translate
 
   mat4.rotate(
     modelViewMatrix, // destination matrix
     modelViewMatrix, // matrix to rotate
-    cubeRotation, // amount to rotate in radians
+    cubeRotation * 0.1, // amount to rotate in radians
     [0, 0, 1]
   ); // axis to rotate around (Z)
   mat4.rotate(
     modelViewMatrix, // destination matrix
     modelViewMatrix, // matrix to rotate
-    cubeRotation * 0.7, // amount to rotate in radians
+    cubeRotation * 0.5, // amount to rotate in radians
     [0, 1, 0]
   ); // axis to rotate around (Y)
   mat4.rotate(
     modelViewMatrix, // destination matrix
     modelViewMatrix, // matrix to rotate
-    cubeRotation * 0.3, // amount to rotate in radians
+    cubeRotation * 1, // amount to rotate in radians
     [1, 0, 0]
   ); // axis to rotate around (X)
 

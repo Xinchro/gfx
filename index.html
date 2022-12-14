@@ -8,11 +8,18 @@
       integrity="sha512-zhHQR0/H5SEBL3Wn6yYSaTTZej12z0hVZKOv3TwCUXT1z5qeqGcXJLLrbERYRScEDDpYIJhPC1fk31gqR783iQ=="
       crossorigin="anonymous"
       defer></script>
-    <script src="webgl-demo.js" type="module" defer></script>
+    
   </head>
 
   <body>
-    hi
+    <!-- <script id="time">document.querySelector('#time').outerHTML = `<span>${new Date()}</span>`</script> -->
+    <script>
+      const script = document.createElement('script')
+      script.src = `webgl-demo.js?=${new Date()}`
+      script.type = "module"
+      script.defer = true
+      document.head.appendChild(script)
+    </script>
     <canvas id="glcanvas" width="640" height="480"></canvas>
   </body>
 </html>

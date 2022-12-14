@@ -1,9 +1,21 @@
-import { initBuffers } from "./init-buffers.js";
+import { initBuffers, initColorBuffer } from "./init-buffers.js";
 import { drawScene } from "./draw-scene.js";
+import { hslToRgb } from './utils.js'
 
 let cubeRotation = 0.0;
+let cubeTranslation = [0.0, 0.0, -6.0];
+let cubeTranslationLimits = [
+  [0.0, -1, -6.0],
+  [0.0, 1, -6.0]
+]
+let cubeGoUp = false
+let cubeColor = 0.000
+
 let deltaTime = 0;
 
+  const canvas = document.querySelector("#glcanvas");
+  // Initialize the GL context
+  const gl = canvas.getContext("webgl");
 
 main();
 
@@ -12,10 +24,6 @@ main();
 // start here
 //
 function main() {
-  const canvas = document.querySelector("#glcanvas");
-  // Initialize the GL context
-  const gl = canvas.getContext("webgl");
-
   // Only continue if WebGL is available and working
   if (gl === null) {
     alert(
@@ -47,9 +55,9 @@ function main() {
 
       // Apply lighting effect
 
-      highp vec3 ambientLight = vec3(0.3, 0.3, 0.3);
+      highp vec3 ambientLight = vec3(0.01, 0.01, 0.01);
       highp vec3 directionalLightColor = vec3(1, 1, 1);
-      highp vec3 directionalVector = normalize(vec3(0.85, 0.8, 0.75));
+      highp vec3 directionalVector = normalize(vec3(0, 1, .5));
 
       highp vec4 transformedNormal = uNormalMatrix * vec4(aVertexNormal, 1.0);
 
@@ -92,6 +100,8 @@ function main() {
     },
   };
 
+  
+
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
   const buffers = initBuffers(gl);
@@ -104,13 +114,37 @@ function main() {
     deltaTime = now - then;
     then = now;
 
-    drawScene(gl, programInfo, buffers, cubeRotation);
+    if(cubeGoUp) {
+      cubeTranslation[1] -= deltaTime;
+    } else {
+      cubeTranslation[1] += deltaTime;
+    }
+
+    if(cubeTranslation[1] < cubeTranslationLimits[0][1]) {
+      cubeGoUp = false
+    }
+    if(cubeTranslation[1] > cubeTranslationLimits[1][1]) {
+      cubeGoUp = true
+    }
+
+    let newColorBuffer = initColorBuffer(gl, [
+        [...hslToRgb(cubeColor, 1, 0.5), 1],
+        [...hslToRgb(cubeColor+0.02, 1, 0.5), 1],
+        [...hslToRgb(cubeColor+0.04, 1, 0.5), 1],
+        [...hslToRgb(cubeColor+0.06, 1, 0.5), 1],
+        [...hslToRgb(cubeColor+0.08, 1, 0.5), 1],
+        [...hslToRgb(cubeColor+0.10, 1, 0.5), 1],
+      ]
+    )
+
+    cubeColor = cubeColor+0.001 > 1 ? 0 : cubeColor+0.001, 1
+
+    drawScene(gl, programInfo, {...buffers, color: newColorBuffer}, cubeRotation, cubeTranslation);
     cubeRotation += deltaTime;
 
     requestAnimationFrame(render);
   }
-requestAnimationFrame(render);
-
+  requestAnimationFrame(render);
 }
 
 //
@@ -168,3 +202,6 @@ function loadShader(gl, type, source) {
 
   return shader;
 }
+
+
+
